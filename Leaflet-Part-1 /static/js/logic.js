@@ -25,5 +25,14 @@ function markerStyle(feature) {
         };
     }
     
+    function markerColor(depth) {
+        depth > 90  ? "red":
+        depth > 70  ? "orangered" :
+        depth > 50  ? "orange" :
+        depth > 30  ? "yellow" :
+        depth > 10   ? "greenyellow" :
+           depth > -10   ? "green" :
+           "greenlight" ;
+   }
  
 });
