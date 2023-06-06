@@ -13,6 +13,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 // Add the earthquake data to the map
 d3.json(Url).then(function (data) {
+    
     // console.log(data.features);
     function mapStyle(feature) {
         return {
@@ -25,18 +26,20 @@ d3.json(Url).then(function (data) {
             weight: 0.5
         };
     }
+
     //Create a function to determine the color of the marker based on the depth of the earthquake
     function markerColor(depth) {
-        return depth > 90 ? "red":
-        depth > 70 ? "orangered":
-        depth > 50 ? "orange":
-        depth > 30 ? "yellow":
-        depth > 10 ? "green":
-        depth >-10 ?"lightgreen":
-        "greenlight";
+        return depth > 90 ? "#FF0000":
+        depth > 70 ? "#FF7F50":
+        depth > 50 ? "#FFC594":
+        depth > 30 ? "#FFDF77":
+        depth > 10 ? "#CEFF00":
+        depth >-10 ?"#66FF66":
+        "#FFFCD1";
 
     }
 
+  //Create a function to determine the radius of the earthquake marker based on its magnitude
 
    function markerRadius(magnitude) {
 
@@ -48,6 +51,7 @@ d3.json(Url).then(function (data) {
         pointToLayer: function (feature, latlng) {
           return L.circleMarker(latlng);
         },
+
     //Set the style for each circleMarker using the mapStyle function
     style: mapStyle,
     
@@ -56,12 +60,12 @@ d3.json(Url).then(function (data) {
     layer.bindPopup("Magnitude: " + feature.properties.mag + " <br>Location: " + feature.properties.place + "<br>Depth: " + feature.geometry.coordinates[2]);
     }
 }).addTo(myMap);
+
 //Create a legend
 var legend = L.control({ position: "bottomright" });
 legend.onAdd = function () {
     var div = L.DomUtil.create("div", "info legend");
      depth = [-10, 10, 30, 50, 70, 90];
-   
   
     //Looping through
     for (var i = 0; i < depth.length; i++) {
