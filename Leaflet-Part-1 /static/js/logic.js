@@ -37,5 +37,16 @@ function markerStyle(feature) {
    function markerRadius(mag) {
     return magnitude * 5;
 }
+//Create a GeoJSON layer containing the features array on the earthquakeData object
 
+L.geoJSON(data, {
+    pointToLayer: function (feature, latlng) {
+        return L.circleMarker(latlng);
+    },
+    
+    //Run the onEachFeature function once for each piece of data in the array
+    onEachFeature: function (feature, layer) {
+    layer.bindPopup("Magnitude: " + feature.properties.mag + " <br>Location: " + feature.properties.place);
+    }
+}).addTo(myMap);
 });
