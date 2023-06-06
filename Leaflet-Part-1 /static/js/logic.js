@@ -10,3 +10,20 @@ let myMap = L.map("map", {
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(myMap);
+
+//
+d3.json(Url).then(function (data) {
+    // console.log(data.features);
+function markerStyle(feature) {
+        return {
+            opacity: 1,
+            fillOpacity: 0.75,
+            fillColor: markerColor(feature.geometry.coordinates[2]),
+            radius: markerRadius(feature.properties.mag),
+            stroke: true,
+            weight: 0.5
+        };
+    }
+    
+ 
+});
