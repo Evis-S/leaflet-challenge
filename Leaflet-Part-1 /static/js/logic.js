@@ -11,55 +11,65 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(myMap);
 
-//
+// Add the earthquake data to the map
 d3.json(Url).then(function (data) {
     // console.log(data.features);
-function markerStyle(feature) {
+    function mapStyle(feature) {
         return {
             opacity: 1,
             fillOpacity: 0.75,
             fillColor: markerColor(feature.geometry.coordinates[2]),
             radius: markerRadius(feature.properties.mag),
             stroke: true,
+            color: "black",
             weight: 0.5
         };
     }
-    
+    //Create a function to determine the color of the marker based on the depth of the earthquake
     function markerColor(depth) {
-        depth > 90  ? "red":
-        depth > 70  ? "orangered" :
-        depth > 50  ? "orange" :
-        depth > 30  ? "yellow" :
-        depth > 10   ? "greenyellow" :
-           "greenlight" ;
-   }
-   function markerRadius(mag) {
+        return depth > 90 ? "red":
+        depth > 70 ? "orangered":
+        depth > 50 ? "orange":
+        depth > 30 ? "yellow":
+        depth > 10 ? "green":
+        depth >-10 ?"lightgreen":
+        "greenlight";
+
+    }
+
+
+   function markerRadius(magnitude) {
+
     return magnitude * 5;
 }
 //Create a GeoJSON layer containing the features array on the earthquakeData object
 
-L.geoJSON(data, {
-    pointToLayer: function (feature, latlng) {
-        return L.circleMarker(latlng);
-    },
+    L.geoJSON(data, {
+        pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng);
+        },
+    //Set the style for each circleMarker using the mapStyle function
+    style: mapStyle,
     
     //Run the onEachFeature function once for each piece of data in the array
     onEachFeature: function (feature, layer) {
-    layer.bindPopup("Magnitude: " + feature.properties.mag + " <br>Location: " + feature.properties.place);
+    layer.bindPopup("Magnitude: " + feature.properties.mag + " <br>Location: " + feature.properties.place + "<br>Depth: " + feature.geometry.coordinates[2]);
     }
 }).addTo(myMap);
 //Create a legend
-let legend = L.control({ position: "bottomright" });
+var legend = L.control({ position: "bottomright" });
 legend.onAdd = function () {
-    let div = L.DomUtil.create("div", "info legend");
-    let depth = [-10, 10, 30, 50, 70, 90];
-    let colors = [greenyellow, green, greenlight, yellow, orange, orangered, red];
+    var div = L.DomUtil.create("div", "info legend");
+     depth = [-10, 10, 30, 50, 70, 90];
+   
+  
     //Looping through
     for (var i = 0; i < depth.length; i++) {
         div.innerHTML +=
-            "<i style='background: " + colors[i] + "'></i> " + depth [i] +  (depth[i + 1] ? '&ndash;' + depth[i + 1] + '<br>' : '+');
+        '<i style="background:' + markerColor(depth[i] + 1) + '"></i> ' +
+        depth[i] + (depth[i + 1] ? '&ndash;' + depth[i + 1] + '<br>' : '+');
   }
     return div;
 };
-legend.addTo(myMap);
+legend.addTo(myMap)
 });
