@@ -31,7 +31,6 @@ function markerStyle(feature) {
         depth > 50  ? "orange" :
         depth > 30  ? "yellow" :
         depth > 10   ? "greenyellow" :
-           depth > -10   ? "green" :
            "greenlight" ;
    }
    function markerRadius(mag) {
@@ -49,4 +48,18 @@ L.geoJSON(data, {
     layer.bindPopup("Magnitude: " + feature.properties.mag + " <br>Location: " + feature.properties.place);
     }
 }).addTo(myMap);
+//Create a legend
+let legend = L.control({ position: "bottomright" });
+legend.onAdd = function () {
+    let div = L.DomUtil.create("div", "info legend");
+    let depth = [-10, 10, 30, 50, 70, 90];
+    let colors = [greenyellow, green, greenlight, yellow, orange, orangered, red];
+    //Looping through
+    for (var i = 0; i < depth.length; i++) {
+        div.innerHTML +=
+            "<i style='background: " + colors[i] + "'></i> " + depth [i] +  (depth[i + 1] ? '&ndash;' + depth[i + 1] + '<br>' : '+');
+  }
+    return div;
+};
+legend.addTo(myMap);
 });
