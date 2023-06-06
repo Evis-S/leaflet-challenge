@@ -43,7 +43,7 @@ d3.json(Url).then(function (data) {
 
    function markerRadius(magnitude) {
 
-    return magnitude * 5;
+    return magnitude * 2.5;
 }
 //Create a GeoJSON layer containing the features array on the earthquakeData object
 
