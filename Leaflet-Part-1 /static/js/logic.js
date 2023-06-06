@@ -34,5 +34,8 @@ function markerStyle(feature) {
            depth > -10   ? "green" :
            "greenlight" ;
    }
- 
+   function markerRadius(mag) {
+    return magnitude * 5;
+}
+
 });
